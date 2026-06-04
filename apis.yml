@@ -1,0 +1,64 @@
+---
+aid: university-of-navarra
+name: University of Navarra
+description: >-
+  The University of Navarra (Universidad de Navarra) is a private research
+  university founded in 1952, headquartered in Pamplona, Spain, with additional
+  campuses in San Sebastian and Madrid. It is ranked #249 in the QS World
+  University Rankings 2025. Its public, machine-consumable developer footprint
+  is limited: the principal documented interface is DADUN (Deposito Academico
+  Digital de la Universidad de Navarra), the institutional open-access repository
+  running on DSpace, which exposes metadata harvesting through the OAI-PMH
+  protocol. No general-purpose public developer portal, open-data API platform,
+  or official GitHub organization could be independently confirmed for the
+  institution at the time of review.
+type: Index
+position: Consumer
+access: 3rd-Party
+image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+url: https://raw.githubusercontent.com/api-evangelist/university-of-navarra/refs/heads/main/apis.yml
+tags:
+  - Education
+  - Higher Education
+  - University
+  - Spain
+  - Open Access
+  - Institutional Repository
+  - OAI-PMH
+created: '2026-06-03'
+modified: '2026-06-03'
+specificationVersion: '0.19'
+apis:
+  - aid: university-of-navarra:dadun-oai-pmh
+    name: DADUN Institutional Repository (OAI-PMH)
+    description: >-
+      DADUN (Deposito Academico Digital de la Universidad de Navarra) is the
+      university's open-access institutional repository, built on DSpace
+      (reported version 5.3). It exposes a standard OAI-PMH 2.0 interface for
+      harvesting Dublin Core and other metadata covering academic deposits,
+      doctoral theses, teaching materials, institutional publications and
+      university journals. The repository is registered in ROAR, Hispana and
+      REBIUN. Note: at the time of review the public site sits behind a bot
+      protection layer (Anubis) that returns HTTP 403 to automated clients.
+    humanURL: https://www.unav.edu/web/biblioteca/guias/dadun
+    baseURL: https://dadun.unav.edu/dspace-oai/request
+    tags: [ Open Access, Institutional Repository, OAI-PMH, DSpace, Library, Metadata ]
+    properties:
+      - type: Documentation
+        url: https://www.unav.edu/web/biblioteca/guias/dadun
+common:
+  - type: Website
+    url: https://en.unav.edu/
+  - type: LinkedIn
+    url: https://www.linkedin.com/school/universidad-de-navarra-cp
+  - type: Plans
+    url: plans/university-of-navarra-plans-pricing.yml
+  - type: RateLimits
+    url: rate-limits/university-of-navarra-rate-limits.yml
+  - type: FinOps
+    url: finops/university-of-navarra-finops.yml
+  - type: Review
+    url: review.yml
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

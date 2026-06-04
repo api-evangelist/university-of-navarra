@@ -1,0 +1,42 @@
+---
+name: University of Navarra
+description: University of Navarra public developer/API footprint review for APIs.json cataloging.
+url: https://raw.githubusercontent.com/api-evangelist/university-of-navarra/refs/heads/main/review.yml
+created: '2026-06-03'
+modified: '2026-06-03'
+reviews:
+  - date: '2026-06-03'
+    rating: 2
+    summary: >-
+      The University of Navarra (Universidad de Navarra), a private Spanish
+      research university ranked QS World 2025 #249, exposes a limited public
+      API footprint. The only documented machine-consumable interface confirmed
+      is DADUN, its DSpace-based open-access institutional repository, which
+      provides an OAI-PMH metadata harvesting endpoint registered in ROAR,
+      Hispana and REBIUN. No general developer portal, open-data API platform,
+      documented SIS/catalog/timetable API, or official GitHub organization
+      could be independently verified. The library discovery tool (Unika) and
+      official websites exist but expose no documented public API. The
+      dadun.unav.edu host returned HTTP 403 to automated probes during review
+      (Anubis bot protection), and LinkedIn returned 999 (standard bot block);
+      both are documented/known-good resources rather than dead links. No
+      endpoints were fabricated.
+    endpoints:
+      - url: https://en.unav.edu/
+        status: 200
+        note: Official institutional website (English), resolved live.
+      - url: https://www.unav.edu/
+        status: 200
+        note: Official institutional website (Spanish), resolved live.
+      - url: https://dadun.unav.edu/
+        status: 403
+        note: DADUN repository home; behind Anubis bot protection, blocks automated clients.
+      - url: https://dadun.unav.edu/dspace-oai/request
+        status: 403
+        note: DSpace OAI-PMH endpoint; documented in ROAR/Hispana but blocked to bots at probe time.
+      - url: https://www.unav.edu/web/biblioteca/guias/dadun
+        status: 200
+        note: Library guide documenting the DADUN repository.
+      - url: https://www.linkedin.com/school/universidad-de-navarra-cp
+        status: 999
+        note: Official LinkedIn school page; 999 is LinkedIn's standard automated-request block.
