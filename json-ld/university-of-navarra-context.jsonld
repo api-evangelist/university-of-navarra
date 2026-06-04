@@ -1,0 +1,60 @@
+{
+  "@context": {
+    "@vocab": "https://schema.org/",
+    "unav": "https://www.unav.edu/ns#",
+    "dc": "http://purl.org/dc/elements/1.1/",
+    "oai": "http://www.openarchives.org/OAI/2.0/",
+
+    "University": "CollegeOrUniversity",
+    "name": "name",
+    "alternateName": "alternateName",
+    "description": "description",
+    "url": "url",
+    "foundingDate": "foundingDate",
+    "logo": "logo",
+    "address": "address",
+    "location": "location",
+    "telephone": "telephone",
+    "sameAs": "sameAs",
+
+    "Repository": "unav:Repository",
+    "repositoryName": "name",
+    "baseURL": {
+      "@id": "url",
+      "@type": "@id"
+    },
+    "protocol": "unav:protocol",
+    "protocolVersion": "version",
+
+    "Record": "DigitalDocument",
+    "identifier": "identifier",
+    "title": "name",
+    "creator": "creator",
+    "subject": "about",
+    "publisher": "publisher",
+    "date": {
+      "@id": "datePublished",
+      "@type": "Date"
+    },
+    "type": "additionalType",
+    "language": "inLanguage",
+    "rights": "license",
+    "metadataFormat": "encodingFormat"
+  },
+  "@type": "CollegeOrUniversity",
+  "name": "University of Navarra",
+  "alternateName": "Universidad de Navarra",
+  "url": "https://en.unav.edu/",
+  "foundingDate": "1952",
+  "description": "Private research university founded in 1952, headquartered in Pamplona, Spain, with additional campuses in San Sebastian and Madrid.",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Pamplona",
+    "addressRegion": "Navarra",
+    "addressCountry": "ES"
+  },
+  "sameAs": [
+    "https://www.linkedin.com/school/universidad-de-navarra-cp",
+    "https://www.unav.edu/web/biblioteca/guias/dadun"
+  ]
+}
