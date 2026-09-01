@@ -1,23 +1,32 @@
 ---
 aid: university-of-navarra
 name: University of Navarra
+x-type: university
+x-category: Private Research University
 description: >-
   The University of Navarra (Universidad de Navarra) is a private research
-  university founded in 1952, headquartered in Pamplona, Spain, with additional
-  campuses in San Sebastian and Madrid. It is ranked #249 in the QS World
-  University Rankings 2025. Its public, machine-consumable developer footprint
-  is limited: the principal documented interface is DADUN (Deposito Academico
-  Digital de la Universidad de Navarra), the institutional open-access repository
-  running on DSpace, which exposes metadata harvesting through the OAI-PMH
-  protocol. No general-purpose public developer portal, open-data API platform,
-  or official GitHub organization could be independently confirmed for the
-  institution at the time of review.
+  university founded in 1952, headquartered in Pamplona, Spain, with campuses in
+  San Sebastian, Madrid and Barcelona. Its programmable footprint is small, and
+  most of it is bought rather than built: the library discovery layer is an Ex
+  Libris Primo VE tenancy, the DADUN institutional repository runs on a hosted
+  DSpace whose host CNAMEs to a third-party platform, the research portal is a
+  Dialnet CRIS tenancy operated by Fundacion Dialnet, and the library guides are
+  Springshare LibGuides. Three surfaces are genuinely the institution's own. The
+  Servicio de Publicaciones operates a self-hosted Open Journal Systems instance
+  at revistas.unav.edu with a live, unauthenticated OAI-PMH 2.0 harvesting
+  interface across 100 sets — the only institution-operated machine-readable API
+  confirmed here. The university runs its own SAML Identity Provider, published
+  through the RedIRIS SIR2 federation and interfederated into eduGAIN since 2018
+  with REFEDS Sirtfi declared. And it is a Crossref member with its own DOI
+  prefix, 10.15581, covering more than 33,000 registered DOIs. There is no
+  central developer portal, no open-data platform, no documented registrar,
+  timetable or campus API, and no verifiable institutional GitHub organization.
 type: Index
 deliveryModel:
   model: saas
   open_source: false
   commercial: true
-  callable_host: false
+  callable_host: true
   label: Hosted service · you call their endpoint
   confidence: medium
   source:
@@ -26,16 +35,16 @@ deliveryModel:
   method: derived
 accessModel:
   pricing: free
-  onboarding: unknown
+  onboarding: none
   trial: false
-  try_now: false
-  public: false
+  try_now: true
+  public: true
   label: Free
-  confidence: medium
+  confidence: high
   source:
-  - plans
-  generated: '2026-07-22'
-  method: derived
+  - probed
+  generated: '2026-09-01'
+  method: probed
 position: Consumer
 access: 3rd-Party
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/university-of-navarra.png
@@ -45,35 +54,206 @@ tags:
   - Higher Education
   - University
   - Spain
+  - Private Research University
   - Open Access
   - Institutional Repository
+  - Scholarly Publishing
   - OAI-PMH
+  - Identity Federation
+  - Library
 created: '2026-06-03'
-modified: '2026-06-03'
+modified: '2026-09-01'
 specificationVersion: '0.23'
 apis:
+  - aid: university-of-navarra:revistas-oai-pmh
+    name: Revistas Cientificas OAI-PMH (Servicio de Publicaciones)
+    x-operator: institution
+    x-operator-basis: >-
+      Host revistas.unav.edu is under the institution's own registrable domain,
+      resolves by A record to institution-controlled nginx with no vendor CNAME,
+      and the OAI Identify response names "Revistas Cientificas. Servicio de
+      Publicaciones de la Universidad de Navarra" with an @unav.es adminEmail.
+    description: >-
+      Live OAI-PMH 2.0 metadata harvesting interface over the university press's
+      journal portfolio, running on a self-hosted Open Journal Systems 3.4.0.8
+      instance. Verified 2026-09-01: 100 sets (one per journal plus per-section
+      subsets), four metadata prefixes (oai_dc, marcxml, oai_marc, rfc1807),
+      persistent deleted-record policy, second-level granularity, gzip and
+      deflate compression, earliest datestamp 2019-02-01. No authentication. The
+      companion OJS REST API is deployed but closed — /api/v1/* returns 403 to
+      anonymous callers.
+    humanURL: https://revistas.unav.edu/
+    baseURL: https://revistas.unav.edu/index.php/index/oai
+    tags: [ OAI-PMH, Scholarly Publishing, Open Access, Metadata, Harvesting ]
+    properties:
+      - type: OpenAPI
+        url: openapi/university-of-navarra-revistas-oai-pmh-openapi.yml
+      - type: Documentation
+        url: https://revistas.unav.edu/
+      - type: Authentication
+        url: authentication/university-of-navarra-authentication.yml
+      - type: Conformance
+        url: conformance/university-of-navarra-conformance.yml
+  - aid: university-of-navarra:sir2-edugain-idp
+    name: Institutional SAML Identity Provider (RedIRIS SIR2 / eduGAIN)
+    x-operator: federation
+    x-operator-basis: >-
+      SAML 2.0 IdP entityID https://www.rediris.es/sir/unavidp, display name
+      "Universidad de Navarra", registration authority http://www.rediris.es/,
+      scope unav.es, IDPSSODescriptor role, first seen in eduGAIN 2018-10-18,
+      eccs_status 1, REFEDS Sirtfi declared. A federation is shared by
+      definition; the IdP behind it is the institution's own.
+    description: >-
+      The university's own Shibboleth/SAML identity provider, published through
+      RedIRIS's SIR2 national identity federation and interfederated into
+      eduGAIN. This is the institution's strongest institution-operated,
+      machine-readable identity surface: its metadata is aggregated and
+      redistributed as signed SAML 2.0 metadata, and it asserts the unav.es
+      scope for federated login to services across Spain and Europe.
+    humanURL: https://www.rediris.es/sir/
+    baseURL: https://technical.edugain.org/api.php?action=list_entities&format=json
+    tags: [ Identity Federation, SAML, Shibboleth, eduGAIN, RedIRIS, Single Sign-On ]
+    properties:
+      - type: Documentation
+        url: https://www.rediris.es/sir/
+      - type: Conformance
+        url: conformance/university-of-navarra-conformance.yml
+  - aid: university-of-navarra:crossref-member
+    name: Crossref Membership (DOI prefix 10.15581)
+    x-operator: registry
+    x-operator-basis: >-
+      Crossref member id 6226, primary-name "Universidad de Navarra", prefix
+      10.15581. A registry the institution is registered IN — the membership is
+      a fact about them; the API is Crossref's and is not saved here.
+    description: >-
+      The University of Navarra is a Crossref member and registers DOIs under its
+      own prefix 10.15581 — 33,267 DOIs as of 2026-09-01 (1,699 current, 31,568
+      backfile). Sampled works resolve to journals published on revistas.unav.edu
+      (Memoria y Civilizacion, Anuario Filosofico), tying the registry membership
+      directly to the institution-operated publishing surface. No DataCite
+      provider or repository client exists for the institution.
+    humanURL: https://www.crossref.org/
+    baseURL: https://api.crossref.org/members/6226
+    tags: [ Crossref, DOI, Registry, Scholarly Publishing, Persistent Identifiers ]
+  - aid: university-of-navarra:ror
+    name: ROR Registration
+    x-operator: registry
+    x-operator-basis: >-
+      Research Organization Registry identifier https://ror.org/02rxc7m23 for
+      "Universidad de Navarra". A registry the institution is registered in.
+    description: >-
+      The institution's entry in the Research Organization Registry, the open
+      identifier used to disambiguate research affiliations. Distinct from the
+      neighbouring and frequently confused Universidad Publica de Navarra
+      (ror.org/02z0cah89) and from Clinica Universidad de Navarra
+      (ror.org/03phm3r45).
+    humanURL: https://ror.org/02rxc7m23
+    baseURL: https://api.ror.org/organizations/02rxc7m23
+    tags: [ ROR, Registry, Persistent Identifiers, Research ]
   - aid: university-of-navarra:dadun-oai-pmh
     name: DADUN Institutional Repository (OAI-PMH)
+    x-operator: tenant
+    x-operator-basis: >-
+      dadun.unav.edu CNAMEs to dadun.visum.studio, and dadun.unav.es CNAMEs to
+      dadun-es.visum.studio — a third-party hosting platform, not the
+      university's own infrastructure. The hostname is on the institution's
+      registrable domain, which is exactly the case a host-based rule
+      over-credits; the CNAME is the basis for reading it as a tenancy.
     description: >-
       DADUN (Deposito Academico Digital de la Universidad de Navarra) is the
-      university's open-access institutional repository, built on DSpace
-      (reported version 5.3). It exposes a standard OAI-PMH 2.0 interface for
-      harvesting Dublin Core and other metadata covering academic deposits,
-      doctoral theses, teaching materials, institutional publications and
-      university journals. The repository is registered in ROAR, Hispana and
-      REBIUN. Note: at the time of review the public site sits behind a bot
-      protection layer (Anubis) that returns HTTP 403 to automated clients.
-    humanURL: https://www.unav.edu/web/biblioteca/guias/dadun
+      university's open-access institutional repository, running DSpace and
+      exposing a standard OAI-PMH 2.0 interface for harvesting Dublin Core
+      metadata across academic deposits, doctoral theses, teaching materials,
+      institutional publications, ancient collections and university journals.
+      The content, the collections and the DOIs are the university's; the
+      deployment is hosted on a third-party platform. The whole host sits behind
+      an Anubis-style bot-protection layer that returned HTTP 403 to every probe
+      on 2026-09-01, including with a desktop browser User-Agent, so the endpoint
+      could not be independently confirmed — it is registered publicly in ROAR,
+      Hispana and REBIUN.
+    humanURL: https://www.unav.edu/web/biblioteca/apoyo-investigador/acceso-abierto-dadun
     baseURL: https://dadun.unav.edu/dspace-oai/request
     tags: [ Open Access, Institutional Repository, OAI-PMH, DSpace, Library, Metadata ]
     properties:
       - type: Documentation
-        url: https://www.unav.edu/web/biblioteca/guias/dadun
+        url: https://www.unav.edu/web/biblioteca/apoyo-investigador/acceso-abierto-dadun
+      - type: Registry
+        url: https://roar.eprints.org/1399/
+  - aid: university-of-navarra:unika-primo
+    name: Unika Library Discovery (Ex Libris Primo VE tenancy)
+    x-operator: tenant
+    x-operator-basis: >-
+      unika.unav.edu CNAMEs to unav.primo.exlibrisgroup.com on eu04; the view id
+      is 34UNAV_INST:VU1. Ex Libris operates the platform and wrote the contract;
+      the tenancy and the catalog are the university's.
+    description: >-
+      Unika is the university library's discovery layer, an Ex Libris Primo VE
+      tenancy. Primo's public "primaws" REST interface answers unauthenticated
+      JSON search requests against the institution's own view — confirmed live on
+      2026-09-01 — which makes the catalog machine-queryable even though no
+      institutional API is documented. The contract belongs to Ex Libris and is
+      deliberately not saved under this institution.
+    humanURL: https://unika.unav.edu/discovery/search?vid=34UNAV_INST:VU1
+    baseURL: https://unika.unav.edu/primaws/rest/pub/configuration/vid/34UNAV_INST:VU1
+    tags: [ Library, Discovery, Primo, Ex Libris, Catalog ]
+  - aid: university-of-navarra:portal-cientifico
+    name: Portal Cientifico (Dialnet CRIS tenancy)
+    x-operator: tenant
+    x-operator-basis: >-
+      portalcientifico.unav.edu CNAMEs to dialnetcris.unirioja.es — the Dialnet
+      CRIS platform operated by Fundacion Dialnet at the Universidad de La Rioja.
+      Institution hostname, vendor engineering.
+    description: >-
+      The university's current research information system (CRIS) and public
+      research portal, listing researchers, research units, publications and
+      projects. It runs as a hosted Dialnet CRIS tenancy rather than as
+      university-operated software, and it is Spain's national alternative to the
+      Elsevier Pure deployments that dominate this cohort. No public API is
+      documented for the tenancy.
+    humanURL: https://portalcientifico.unav.edu/
+    tags: [ CRIS, Research Portal, Dialnet, Research Information ]
+  - aid: university-of-navarra:biblioguias
+    name: BiblioGuias (Springshare LibGuides tenancy)
+    x-operator: tenant
+    x-operator-basis: >-
+      biblioguias.unav.edu CNAMEs to region-eu.libguides.com — Springshare's
+      LibGuides platform.
+    description: >-
+      The library's guides platform, including the institution's public generative
+      AI guidance for students and researchers (definitions, ethics, tooling).
+      Hosted on Springshare LibGuides; the guidance content is the university's,
+      the platform and any API are Springshare's.
+    humanURL: https://biblioguias.unav.edu/
+    tags: [ Library, LibGuides, Springshare, Research Support, Artificial Intelligence ]
 common:
-  - type: DomainSecurity
-    url: security/university-of-navarra-domain-security.yml
   - type: Website
     url: https://en.unav.edu/
+  - type: Documentation
+    url: https://www.unav.edu/web/biblioteca/apoyo-investigador/acceso-abierto-dadun
+  - type: TermsOfService
+    url: https://www.unav.edu/informacion-legal
+  - type: PrivacyPolicy
+    url: https://www.unav.edu/proteccion-de-datos
+  - type: ResearchRepository
+    url: https://www.unav.edu/web/biblioteca/apoyo-investigador/acceso-abierto-dadun
+  - type: LibraryCatalog
+    url: https://unika.unav.edu/discovery/search?vid=34UNAV_INST:VU1
+  - type: IdentityFederation
+    url: https://www.rediris.es/sir/
+  - type: AIPolicy
+    url: https://www.unav.edu/documents/10162/161278125/Politica+IA.pdf
+  - type: AITooling
+    url: https://biblioguias.unav.edu/inteligencia-artificial-generativa
+  - type: OpenAPI
+    url: openapi/university-of-navarra-revistas-oai-pmh-openapi.yml
+  - type: Authentication
+    url: authentication/university-of-navarra-authentication.yml
+  - type: Conformance
+    url: conformance/university-of-navarra-conformance.yml
+  - type: Examples
+    url: examples/index.yml
+  - type: DomainSecurity
+    url: security/university-of-navarra-domain-security.yml
   - type: LinkedIn
     url: https://www.linkedin.com/school/universidad-de-navarra-cp
   - type: Plans
@@ -84,6 +264,64 @@ common:
     url: finops/university-of-navarra-finops.yml
   - type: Review
     url: review.yml
+x-coverage:
+  state: covered
+  reason: covered
+  detail: >-
+    One institution-operated machine-readable API was found, verified live and
+    documented: the Servicio de Publicaciones OAI-PMH 2.0 interface at
+    revistas.unav.edu (OJS 3.4.0.8, 100 sets, four metadata formats,
+    unauthenticated). Two further institution-owned surfaces were confirmed
+    through third parties: the university's own SAML IdP in RedIRIS SIR2 and
+    eduGAIN (entityID https://www.rediris.es/sir/unavidp, scope unav.es, Sirtfi
+    declared) and Crossref membership 6226 with DOI prefix 10.15581. Everything
+    else that looks like an API here is a tenancy on someone else's platform:
+    DADUN CNAMEs to visum.studio, Unika to Ex Libris Primo, the research portal
+    to Dialnet CRIS at Universidad de La Rioja, and BiblioGuias to Springshare —
+    all four recorded as relationships, none of their contracts saved. Two
+    surfaces resisted probing: dadun.unav.edu returns 403 to every automated
+    client behind an Anubis-style bot wall, and the OJS REST API returns 403
+    without a per-user token. No central developer portal, open-data platform,
+    registrar/timetable API, or verifiable institutional GitHub organization
+    exists. www.unav.edu serves a soft-404 (HTTP 200 redirect to /error-404) for
+    /llms.txt and /.well-known/security.txt, so neither was credited; its
+    robots.txt does carry a real Content-Signal declaration
+    (ai-train=no, search=yes, ai-input=yes).
+  generated: '2026-09-01'
+  method: probed
+  evidence:
+    - url: https://revistas.unav.edu/index.php/index/oai?verb=Identify
+      status: 200
+    - url: https://revistas.unav.edu/index.php/index/oai?verb=ListSets
+      status: 200
+    - url: https://revistas.unav.edu/index.php/anuario-de-historia-iglesia/api/v1/issues
+      status: 403
+    - url: https://technical.edugain.org/api.php?action=list_entities&format=json
+      status: 200
+    - url: https://api.crossref.org/members/6226
+      status: 200
+    - url: https://api.ror.org/organizations/02rxc7m23
+      status: 200
+    - url: https://dadun.unav.edu/dspace-oai/request?verb=Identify
+      status: 403
+    - url: https://unika.unav.edu/primaws/rest/pub/pnxs
+      status: 200
+    - url: https://portalcientifico.unav.edu/
+      status: 200
+    - url: https://biblioguias.unav.edu/inteligencia-artificial-generativa
+      status: 200
+    - url: https://www.unav.edu/documents/10162/161278125/Politica+IA.pdf
+      status: 200
+    - url: https://www.unav.edu/informacion-legal
+      status: 200
+    - url: https://www.unav.edu/proteccion-de-datos
+      status: 200
+    - url: https://www.unav.edu/web/biblioteca/guias/dadun
+      status: 404
+      note: previously listed as Documentation; 302 to /error-404, pointer removed
+    - url: https://www.unav.edu/llms.txt
+      status: 404
+      note: HTTP 200 but redirects to /error-404 — soft-404, not credited
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com
