@@ -79,6 +79,13 @@ apis:
   - Shibboleth
   - eduGAIN
   - RedIRIS
+  - SSO
+  tags_raw:
+  - Identity Federation
+  - SAML
+  - Shibboleth
+  - eduGAIN
+  - RedIRIS
   - Single Sign-On
   properties:
   - type: Documentation
@@ -177,6 +184,11 @@ apis:
     Pure deployments that dominate this cohort. No public API is documented for the tenancy.
   humanURL: https://portalcientifico.unav.edu/
   tags:
+  - CRI
+  - Research Portal
+  - Dialnet
+  - Research Information
+  tags_raw:
   - CRIS
   - Research Portal
   - Dialnet
