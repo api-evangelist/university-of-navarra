@@ -1,0 +1,35 @@
+---
+name: University of Navarra — Captured Examples
+description: >-
+  Raw responses captured from the University of Navarra's own OAI-PMH interface.
+  These are verbatim server responses, not hand-written samples.
+generated: '2026-09-01'
+method: probed
+source: https://revistas.unav.edu/index.php/index/oai
+examples:
+  - file: revistas-oai-identify.xml
+    request: https://revistas.unav.edu/index.php/index/oai?verb=Identify
+    status: 200
+    generated: '2026-09-01'
+    method: probed
+  - file: revistas-oai-listmetadataformats.xml
+    request: https://revistas.unav.edu/index.php/index/oai?verb=ListMetadataFormats
+    status: 200
+    generated: '2026-09-01'
+    method: probed
+  - file: revistas-oai-listsets.xml
+    request: https://revistas.unav.edu/index.php/index/oai?verb=ListSets
+    status: 200
+    generated: '2026-09-01'
+    method: probed
+  - file: revistas-oai-listidentifiers.xml
+    request: https://revistas.unav.edu/index.php/index/oai?verb=ListIdentifiers&metadataPrefix=oai_dc&set=anuario-de-historia-iglesia
+    status: 200
+    generated: '2026-09-01'
+    method: probed
+  - file: revistas-oai-error-badverb.xml
+    request: https://revistas.unav.edu/index.php/index/oai?verb=BadVerbTest
+    status: 200
+    generated: '2026-09-01'
+    method: probed
+    note: OAI-PMH returns protocol errors with HTTP 200 and an <error code="badVerb"> element.

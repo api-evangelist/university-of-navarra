@@ -1,0 +1,60 @@
+---
+name: University of Navarra — Authentication
+description: >-
+  How the University of Navarra's verified machine-readable surfaces authenticate
+  callers. Probed 2026-09-01; nothing here is inferred from documentation.
+generated: '2026-09-01'
+method: probed
+source:
+  - https://revistas.unav.edu/index.php/index/oai?verb=Identify
+  - https://revistas.unav.edu/index.php/anuario-de-historia-iglesia/api/v1/issues
+  - https://dadun.unav.edu/dspace-oai/request?verb=Identify
+  - https://unika.unav.edu/primaws/rest/pub/pnxs
+surfaces:
+  - surface: Revistas Cientificas OAI-PMH
+    url: https://revistas.unav.edu/index.php/index/oai
+    operator: institution
+    auth: none
+    status: 200
+    detail: >-
+      Open, unauthenticated OAI-PMH 2.0 harvesting interface. No API key, no
+      registration, no rate-limit headers observed. Protocol errors are returned
+      as HTTP 200 with an OAI <error> element rather than an HTTP status.
+  - surface: Revistas Cientificas OJS REST API
+    url: https://revistas.unav.edu/index.php/{journal}/api/v1/issues
+    operator: institution
+    auth: api_key
+    status: 403
+    detail: >-
+      The OJS 3.4 REST API is deployed but closed: /api/v1/issues,
+      /api/v1/submissions and /api/v1/contexts all return 403 application/json to
+      an anonymous caller. OJS gates these behind a per-user API token issued from
+      the journal admin interface; no public self-service issuance was found.
+  - surface: DADUN institutional repository
+    url: https://dadun.unav.edu/dspace-oai/request
+    operator: tenant
+    auth: unknown
+    status: 403
+    detail: >-
+      Every path on dadun.unav.edu and dadun.unav.es returns 403 to automated
+      clients, including with a desktop browser User-Agent — an Anubis-style bot
+      challenge in front of the whole host, not an authentication requirement on
+      the API. The underlying OAI-PMH interface is registered publicly in ROAR,
+      Hispana and REBIUN.
+  - surface: Unika library discovery (Ex Libris Primo VE)
+    url: https://unika.unav.edu/primaws/rest/pub/pnxs
+    operator: tenant
+    auth: none
+    status: 200
+    detail: >-
+      Ex Libris Primo VE's public "primaws" search API answers unauthenticated
+      JSON requests for view id 34UNAV_INST:VU1. The contract is Ex Libris's; the
+      tenancy and the catalog data are the university's.
+  - surface: Institutional SAML Identity Provider
+    url: https://www.rediris.es/sir/unavidp
+    operator: federation
+    auth: saml2
+    detail: >-
+      SAML 2.0 Web SSO. Trust is established through RedIRIS SIR2 metadata and
+      eduGAIN interfederation rather than per-client credentials. Scope unav.es,
+      REFEDS Sirtfi declared.

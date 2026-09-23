@@ -1,0 +1,157 @@
+openapi: 3.0.3
+info:
+  title: Universidad de Navarra Revistas Cientificas OAI-PMH Interface
+  version: '2.0'
+  description: >-
+    Machine-readable description of the OAI-PMH 2.0 metadata harvesting interface
+    operated by the Servicio de Publicaciones de la Universidad de Navarra at
+    revistas.unav.edu. The interface is the university's own deployment: the host
+    sits under the institution's registrable domain (unav.edu), resolves to
+    institution-controlled infrastructure with no vendor CNAME, and the OAI
+    Identify response reports repositoryName "Revistas Cientificas. Servicio de
+    Publicaciones de la Universidad de Navarra" with an institutional adminEmail
+    (@unav.es). The software underneath is Open Journal Systems 3.4.0.8 from the
+    Public Knowledge Project; this document describes THE UNIVERSITY'S DEPLOYMENT
+    and its verified capabilities, not PKP's product. Every path, parameter,
+    metadata prefix and error code below was confirmed against the live endpoint
+    on 2026-09-01; captured responses are in examples/.
+  contact:
+    name: Servicio de Publicaciones, Universidad de Navarra
+    email: rhereder@unav.es
+    url: https://revistas.unav.edu/
+  license:
+    name: OAI-PMH 2.0 protocol (Open Archives Initiative)
+    url: https://www.openarchives.org/OAI/openarchivesprotocol.html
+  x-operator: institution
+  x-operator-basis: >-
+    Host revistas.unav.edu is under the institution's own registrable domain
+    unav.edu, has no CNAME to any vendor platform (A record only, nginx/1.20.1),
+    and the OAI Identify response names the university's own Servicio de
+    Publicaciones with an @unav.es administrative contact.
+  x-provenance:
+    method: derived
+    generated: '2026-09-01'
+    source:
+      - https://revistas.unav.edu/index.php/index/oai?verb=Identify
+      - https://revistas.unav.edu/index.php/index/oai?verb=ListMetadataFormats
+      - https://revistas.unav.edu/index.php/index/oai?verb=ListSets
+      - https://revistas.unav.edu/index.php/index/oai?verb=ListIdentifiers&metadataPrefix=oai_dc
+    note: >-
+      Derived by API Evangelist from live probes of the endpoint. The university
+      does not publish an OpenAPI for this interface; OAI-PMH is a protocol
+      specification, and this document maps the protocol onto the deployment's
+      verified base URL, sets and metadata formats.
+  x-software:
+    name: Open Journal Systems
+    version: 3.4.0.8
+    vendor: Public Knowledge Project
+    self_hosted: true
+  x-oai-pmh:
+    protocolVersion: '2.0'
+    repositoryIdentifier: ojs.pkp.sfu.ca
+    earliestDatestamp: '2019-02-01T12:03:23Z'
+    deletedRecord: persistent
+    granularity: YYYY-MM-DDThh:mm:ssZ
+    compression: [gzip, deflate]
+    setCount: 100
+servers:
+  - url: https://revistas.unav.edu/index.php/index
+    description: Site-wide OAI-PMH interface across all Universidad de Navarra journals
+tags:
+  - name: Harvesting
+    description: OAI-PMH 2.0 verbs for harvesting scholarly metadata
+paths:
+  /oai:
+    get:
+      summary: OAI-PMH 2.0 request endpoint
+      description: >-
+        Single OAI-PMH request endpoint. The verb parameter selects the operation.
+        Responses are OAI-PMH 2.0 XML documents. No authentication is required.
+      operationId: oaiRequest
+      tags: [Harvesting]
+      parameters:
+        - name: verb
+          in: query
+          required: true
+          description: The OAI-PMH verb to execute.
+          schema:
+            type: string
+            enum:
+              - Identify
+              - ListMetadataFormats
+              - ListSets
+              - ListIdentifiers
+              - ListRecords
+              - GetRecord
+        - name: metadataPrefix
+          in: query
+          required: false
+          description: >-
+            Metadata format to return. Required for ListIdentifiers, ListRecords
+            and GetRecord. Formats confirmed live on this deployment.
+          schema:
+            type: string
+            enum: [oai_dc, marcxml, oai_marc, rfc1807]
+        - name: set
+          in: query
+          required: false
+          description: >-
+            Set to restrict the harvest to. This deployment exposes 100 sets, one
+            per journal plus per-section subsets (for example
+            anuario-de-historia-iglesia and anuario-de-historia-iglesia:ART-not).
+          schema:
+            type: string
+        - name: identifier
+          in: query
+          required: false
+          description: >-
+            Record identifier, required for GetRecord. Identifiers take the form
+            oai:ojs.pkp.sfu.ca:article/<id>.
+          schema:
+            type: string
+        - name: from
+          in: query
+          required: false
+          description: Lower bound of the datestamp range, UTC.
+          schema:
+            type: string
+            format: date-time
+        - name: until
+          in: query
+          required: false
+          description: Upper bound of the datestamp range, UTC.
+          schema:
+            type: string
+            format: date-time
+        - name: resumptionToken
+          in: query
+          required: false
+          description: Flow-control token returned by an incomplete list response.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: >-
+            OAI-PMH 2.0 XML response. Protocol-level failures are also returned
+            with HTTP 200 and an <error> element carrying an OAI error code.
+          content:
+            text/xml:
+              schema:
+                type: string
+                format: xml
+              examples:
+                identify:
+                  summary: Identify response captured 2026-09-01
+                  externalValue: ../examples/revistas-oai-identify.xml
+                listMetadataFormats:
+                  summary: ListMetadataFormats response captured 2026-09-01
+                  externalValue: ../examples/revistas-oai-listmetadataformats.xml
+                listSets:
+                  summary: ListSets response captured 2026-09-01
+                  externalValue: ../examples/revistas-oai-listsets.xml
+                listIdentifiers:
+                  summary: ListIdentifiers response captured 2026-09-01
+                  externalValue: ../examples/revistas-oai-listidentifiers.xml
+                badVerb:
+                  summary: badVerb protocol error captured 2026-09-01
+                  externalValue: ../examples/revistas-oai-error-badverb.xml

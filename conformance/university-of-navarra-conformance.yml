@@ -1,0 +1,99 @@
+---
+name: University of Navarra — Domain Standard Conformance
+description: >-
+  Education-regime domain standards the University of Navarra was verified against
+  on 2026-09-01. Reward-only: every entry below points at a location that was
+  probed live, and standards with no evidence are recorded as not_found rather
+  than assumed.
+generated: '2026-09-01'
+method: probed
+source:
+  - https://revistas.unav.edu/index.php/index/oai?verb=Identify
+  - https://technical.edugain.org/api.php?action=list_entities&format=json
+  - https://api.crossref.org/members/6226
+regime: education
+conformance:
+  - standard: oai-pmh
+    status: conformant
+    operator: institution
+    evidence:
+      url: https://revistas.unav.edu/index.php/index/oai?verb=Identify
+      status: 200
+      location: OAI-PMH/Identify/protocolVersion
+      value: '2.0'
+      detail: >-
+        Live OAI-PMH 2.0 interface for the Servicio de Publicaciones. Identify,
+        ListMetadataFormats, ListSets, ListIdentifiers and the badVerb error path
+        all confirmed; 100 sets and four metadata prefixes (oai_dc, marcxml,
+        oai_marc, rfc1807). Captured responses in examples/.
+    artifact: openapi/university-of-navarra-revistas-oai-pmh-openapi.yml
+  - standard: oai-pmh
+    status: declared
+    operator: tenant
+    evidence:
+      url: https://dadun.unav.edu/dspace-oai/request?verb=Identify
+      status: 403
+      detail: >-
+        DADUN's DSpace OAI-PMH base URL is registered in ROAR, Hispana and REBIUN,
+        but the host is behind an Anubis bot-protection layer that returns 403 to
+        every automated client, including a browser User-Agent. Declared and
+        third-party-registered, not independently verified by us. The host CNAMEs
+        to dadun.visum.studio, so the deployment is a tenancy, not institutional
+        engineering.
+  - standard: saml
+    status: conformant
+    operator: federation
+    evidence:
+      url: https://technical.edugain.org/api.php?action=list_entities&format=json
+      status: 200
+      location: entity entityid=https://www.rediris.es/sir/unavidp
+      value: IDPSSODescriptor
+      detail: >-
+        SAML 2.0 Identity Provider "Universidad de Navarra", registered by RedIRIS
+        (SIR/SIR2) and interfederated into eduGAIN since 2018-10-18. Scope
+        unav.es. eccs_status 1, sirtfi_status 1 (REFEDS Sirtfi assurance declared).
+  - standard: shibboleth
+    status: conformant
+    operator: federation
+    evidence:
+      url: https://technical.edugain.org/api.php?action=list_entities&format=json
+      status: 200
+      location: entity entityid=https://www.rediris.es/sir/unavidp, regauth=http://www.rediris.es/
+      detail: >-
+        Institutional IdP published through the RedIRIS SIR2 Shibboleth/SAML
+        federation, which has been in eduGAIN production since 2011-07-12.
+  - standard: crossref
+    status: conformant
+    operator: registry
+    evidence:
+      url: https://api.crossref.org/members/6226
+      status: 200
+      location: message.prefixes
+      value: '10.15581'
+      detail: >-
+        Crossref member 6226 "Universidad de Navarra", DOI prefix 10.15581,
+        33,267 registered DOIs (1,699 current, 31,568 backfile). Sampled works
+        resolve to journals published on revistas.unav.edu (Memoria y
+        Civilizacion, Anuario Filosofico), tying the membership directly to the
+        institution-operated publishing surface.
+not_found:
+  - standard: datacite
+    detail: >-
+      No DataCite provider or repository client matches Navarra
+      (api.datacite.org/providers?query=navarra and /clients?query=navarra both
+      returned an empty data array on 2026-09-01). The university registers DOIs
+      through Crossref, not DataCite.
+  - standard: orcid
+    detail: No institution-level ORCID member or consortium record was evidenced.
+  - standard: scim
+    detail: No SCIM provisioning endpoint or declaration found.
+  - standard: lti
+    detail: No public LTI tool or platform registration found.
+  - standard: oneroster
+    detail: Not applicable / not found — no public rostering interface.
+  - standard: ed-fi
+    detail: Not applicable — Ed-Fi is a US K-12 standard.
+  - standard: caliper
+    detail: No Caliper analytics endpoint found.
+  - standard: qti
+    detail: No QTI assessment interface found.
